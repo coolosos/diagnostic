@@ -14,7 +14,7 @@ doc/api/
 # dotenv environment variables file
 .env*
 .vscode
-
+.idea
 
 
 # Avoid committing generated Javascript files:
