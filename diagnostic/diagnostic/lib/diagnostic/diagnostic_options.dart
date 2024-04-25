@@ -1,5 +1,3 @@
-
-
 base class DiagnosticOption {
   const DiagnosticOption({
     required this.mustCaptureExceptions,

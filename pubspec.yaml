@@ -1,13 +1,9 @@
-name: diagnostic
+name: melos_rack_workspace
 publish_to: none
 
 environment:
   sdk: ">=3.3.1 <4.0.0"
-  flutter: ">=3.0.0"
-
-dependencies:
-  flutter:
-    sdk: flutter
-
+  flutter: ">=3.19.0"
 dev_dependencies:
+  melos: ^5.2.0
   coolint: 1.0.3
