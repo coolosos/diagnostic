@@ -2,7 +2,8 @@ library diagnostic_manager;
 
 import 'dart:async';
 
-import 'package:flutter/foundation.dart' hide DiagnosticLevel, DiagnosticsNode;
+
+import 'package:meta/meta.dart';
 
 import '../diagnostic/diagnostic.dart';
 
@@ -34,31 +35,6 @@ base class DiagnosticManager<T extends Diagnostic> implements Diagnostic {
         Future.wait(_diagnostics.map((diagnostic) => diagnostic.init()));
 
     await instanciates;
-
-    FlutterError.onError = (details) {
-      for (Diagnostic diagnostic in _diagnostics) {
-        diagnostic.captureException(
-          exception: DiagnosticExpection(
-            level: DiagnosticLevel.error,
-            throwable: details.exception,
-            stackTrace: details.stack,
-          ),
-        );
-      }
-    };
-
-    PlatformDispatcher.instance.onError = (exception, stackTrace) {
-      for (Diagnostic diagnostic in _diagnostics) {
-        diagnostic.captureException(
-          exception: DiagnosticExpection(
-            level: DiagnosticLevel.error,
-            throwable: exception,
-            stackTrace: stackTrace,
-          ),
-        );
-      }
-      return false;
-    };
   }
 
   ///Send the capture exception to diferent Diagnostic

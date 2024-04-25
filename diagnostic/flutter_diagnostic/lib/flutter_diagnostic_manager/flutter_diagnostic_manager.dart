@@ -1,6 +1,8 @@
 library diagnostic_manager;
 
 import 'package:diagnostic/diagnostic_manager/diagnostic_manager.dart';
+
+import 'package:flutter/foundation.dart' hide DiagnosticLevel, DiagnosticsNode;
 import 'package:flutter/widgets.dart' hide DiagnosticLevel, DiagnosticsNode;
 
 import '../flutter_diagnostic/flutter_diagnostic.dart';
@@ -17,6 +19,36 @@ base class FlutterDiagnosticManager
   ///
   ///Probably you can anidate multiple diagnostic
   final Widget Function(Widget child)? screenRecord;
+
+  @override
+  Future<void> init() async {
+    await super.init();
+
+    FlutterError.onError = (details) {
+      for (Diagnostic diagnostic in diagnostic) {
+        diagnostic.captureException(
+          exception: DiagnosticExpection(
+            level: DiagnosticLevel.error,
+            throwable: details.exception,
+            stackTrace: details.stack,
+          ),
+        );
+      }
+    };
+
+    PlatformDispatcher.instance.onError = (exception, stackTrace) {
+      for (Diagnostic diagnostic in diagnostic) {
+        diagnostic.captureException(
+          exception: DiagnosticExpection(
+            level: DiagnosticLevel.error,
+            throwable: exception,
+            stackTrace: stackTrace,
+          ),
+        );
+      }
+      return false;
+    };
+  }
 
   ///Return the current RouteObserver availables in all the diagnostic
   @mustCallSuper
