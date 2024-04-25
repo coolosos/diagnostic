@@ -1,8 +1,7 @@
+import 'package:diagnostic/diagnostic/diagnostic.dart';
 import 'package:flutter/widgets.dart';
 
-import '../diagnostic/diagnostic.dart';
-
-abstract interface class DiagnosticTool implements Diagnostic {
+abstract interface class FlutterDiagnostic implements Diagnostic {
   RouteObserver? navigatorObserver({
     required String? Function(RouteSettings? route) nameExtractor,
   });

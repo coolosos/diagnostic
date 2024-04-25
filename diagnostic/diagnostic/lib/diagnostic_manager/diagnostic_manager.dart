@@ -3,31 +3,26 @@ library diagnostic_manager;
 import 'dart:async';
 
 import 'package:flutter/foundation.dart' hide DiagnosticLevel, DiagnosticsNode;
-import 'package:flutter/widgets.dart' hide DiagnosticLevel, DiagnosticsNode;
 
 import '../diagnostic/diagnostic.dart';
-import '../diagnostic_tool/diagnostic_tool.dart';
 
 export "../diagnostic/diagnostic.dart";
 
 part "diagnostic_options_manager.dart";
 
-base class DiagnosticManager implements Diagnostic {
+base class DiagnosticManager<T extends Diagnostic> implements Diagnostic {
   const DiagnosticManager({
-    required List<DiagnosticTool> diagnostics,
+    required List<T> diagnostics,
     required this.options,
-    required this.screenRecord,
   }) : _diagnostics = diagnostics;
 
-  final List<DiagnosticTool> _diagnostics;
+  final List<T> _diagnostics;
+
+  @protected
+  List<T> get diagnostic => _diagnostics;
 
   @override
   final DiagnosticManagerOption options;
-
-  ///Usually one of the diagnostic usually have a screen record for errors.
-  ///
-  ///Probably you can anidate multiple diagnostic
-  final Widget Function(Widget child)? screenRecord;
 
   ///initialice all diagnostic availables in the project
   @override
@@ -79,19 +74,6 @@ base class DiagnosticManager implements Diagnostic {
         exception: exception,
       );
     }
-  }
-
-  ///Return the current RouteObserver availables in all the diagnostic
-  @mustCallSuper
-  List<RouteObserver<Route>>? navigatorObservers({
-    required String? Function(RouteSettings? route) nameExtractor,
-  }) {
-    if (!(options.mustInitializeDiagnostics)) return null;
-
-    return _diagnostics
-        .map((e) => e.navigatorObserver(nameExtractor: nameExtractor))
-        .whereType<RouteObserver>()
-        .toList();
   }
 
   @override
