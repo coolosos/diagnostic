@@ -15,7 +15,7 @@ doc/api/
 .env*
 .vscode
 .idea
-*melos_rack.iml
+*.iml
 
 
 # Avoid committing generated Javascript files:
