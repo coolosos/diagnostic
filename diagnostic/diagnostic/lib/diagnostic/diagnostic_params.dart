@@ -1,3 +1,8 @@
+///Generic exception param.
+///
+///This params contains the common diagnostic sdk exception.
+///If custom implementation is needed you always can extend and required your
+///custom exception in captureException function
 base class DiagnosticExpection {
   const DiagnosticExpection({
     required this.throwable,
@@ -12,6 +17,11 @@ base class DiagnosticExpection {
   final Map<String, String>? parameters;
 }
 
+///Generic analytic param.
+///
+///This params contains the common diagnostic sdk analytic.
+///If custom implementation is needed you always can extend and required your
+///custom exception in sendAnalyticEvent function
 base class DiagnosticAnalyticEvent {
   const DiagnosticAnalyticEvent({required this.name, required this.parameters});
 
@@ -19,6 +29,11 @@ base class DiagnosticAnalyticEvent {
   final Map<String, String>? parameters;
 }
 
+///Generic event param.
+///
+///This params contains the common diagnostic sdk event.
+///If custom implementation is needed you always can extend and required your
+///custom exception in sendLogEvent function
 base class DiagnosticLogsEvent {
   const DiagnosticLogsEvent({
     required this.level,
@@ -33,11 +48,21 @@ base class DiagnosticLogsEvent {
   final Map<String, String>? parameters;
 }
 
+///Define the level event
 enum DiagnosticLevel {
+  ///Usually Develop information
   debug,
+
+  ///Usually Tracking information
   info,
+
+  ///Usually Failure information
   warning,
+
+  ///Usually Uncontrol information
   error,
+
+  ///Usually Fatal information
   fatal,
   ;
 
