@@ -1,5 +1,6 @@
 name: diagnostic
 description: Diagnostic packages interfaces for generate differents managers or tool for control. Usually create for firebase, sentry, CloudWatch...
+version: 1.0.0
 
 repository: https://github.com/coolosos/diagnostic
 issue_tracker: https://github.com/coolosos/diagnostic/issues
