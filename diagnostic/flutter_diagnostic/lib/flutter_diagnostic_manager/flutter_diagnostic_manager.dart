@@ -1,5 +1,3 @@
-library diagnostic_manager;
-
 import 'package:diagnostic/diagnostic_manager/diagnostic_manager.dart';
 
 import 'package:flutter/foundation.dart' hide DiagnosticLevel, DiagnosticsNode;
@@ -28,7 +26,7 @@ base class FlutterDiagnosticManager extends DiagnosticManager {
     await super.init();
 
     FlutterError.onError = (details) {
-      for (Diagnostic diagnostic in diagnostics) {
+      for (final diagnostic in diagnostics) {
         diagnostic.captureException(
           exception: DiagnosticException(
             level: DiagnosticLevel.error,
@@ -40,7 +38,7 @@ base class FlutterDiagnosticManager extends DiagnosticManager {
     };
 
     PlatformDispatcher.instance.onError = (exception, stackTrace) {
-      for (Diagnostic diagnostic in diagnostics) {
+      for (final diagnostic in diagnostics) {
         diagnostic.captureException(
           exception: DiagnosticException(
             level: DiagnosticLevel.error,
@@ -61,7 +59,7 @@ base class FlutterDiagnosticManager extends DiagnosticManager {
   List<RouteObserver<Route>>? navigatorObservers({
     required String? Function(RouteSettings? route) nameExtractor,
   }) {
-    if (!(options.mustInitializeDiagnostics)) return null;
+    if (!options.mustInitializeDiagnostics) return null;
 
     return diagnostics
         .whereType<FlutterDiagnostic>()

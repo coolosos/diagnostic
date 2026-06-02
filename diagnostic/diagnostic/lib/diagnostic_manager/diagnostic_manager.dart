@@ -1,4 +1,4 @@
-library diagnostic_manager;
+library;
 
 import 'dart:async';
 
@@ -7,9 +7,9 @@ import 'package:meta/meta.dart';
 import '../analytics.dart';
 import '../diagnostic/diagnostic.dart';
 
-export "../diagnostic/diagnostic.dart";
+export '../diagnostic/diagnostic.dart';
 
-part "diagnostic_options_manager.dart";
+part 'diagnostic_options_manager.dart';
 
 ///Manage all the Diagnostic SDK on the project.
 ///Choose where is the better sdk for each function and filter if it is necessary.

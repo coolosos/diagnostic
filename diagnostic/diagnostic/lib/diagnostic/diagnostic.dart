@@ -1,5 +1,3 @@
-library diagnostic;
-
 import 'dart:async';
 
 import '../analytics.dart';

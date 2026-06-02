@@ -1,4 +1,4 @@
-part of "diagnostic_manager.dart";
+part of 'diagnostic_manager.dart';
 
 ///Contains the send/capture and initialize options
 ///
