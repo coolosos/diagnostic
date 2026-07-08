@@ -1,8 +1,3 @@
-# 1.0.0
-First package integration
-## What's Changed
-* feat: ✨ Added diagnostic base and interface
-
 # 1.1.0
 Modularization and architecture decoupling
 
@@ -13,3 +8,9 @@ Modularization and architecture decoupling
 * refactor: 🧹 Removed generic types (`<T extends Diagnostic>`) from managers to leverage true polymorphism.
 * fix: 🔒 Updated internal asynchronous event loops with modern `.ignore()` patterns for safer telemetry broadcasting.
 * chore: 📝 Rewrote README documentation with distinct pure Dart and Flutter implementation guides.
+
+# 1.0.0
+First package integration
+## What's Changed
+* feat: ✨ Added diagnostic base and interface
+
