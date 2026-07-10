@@ -1,101 +1,103 @@
 ## Table of Contents
 
-- [Table of Contents](#table-of-contents)
 - [Overview](#overview)
 - [Getting Started](#getting-started)
 - [Usage](#usage)
+  - [Pure Dart Implementation](#pure-dart-implementation)
+  - [Flutter Extension (Optional)](#flutter-extension-optional)
 - [License](#license)
+
 <br>
 
 ## Overview
 
-Using diagnostic tools such as Firebase Analytic with Firebase Crashlytics, Sentry, CloudWatch or others or interchanging between them is a common practice in software development. Switching from one sdk to another often causes headaches as they are used or handled in very different ways.
+Using multiple diagnostic tools (such as Firebase Analytics, Sentry, CloudWatch, or Datadog) and switching between them is a common practice in software development. However, migrating or managing multiple SDKs often causes headaches because they are handled in very different ways.
 
-For this purpose there is this development package, it provides an interface for the implementation of the different sdk, favoring the change and/or the use between them.
+This package provides a **pure Dart, UI-agnostic interface** to standardize different diagnostic SDKs, making it seamless to add, remove, or swap tracking tools without changing your core business logic.
 
-For the multiple use it is also provided a FlutteDiagnosticManager that is in charge of initializing all the FlutteDiagnostic of a project and send the events to each one of them.
-
-Translated with DeepL.com (free version)
+It features a robust `DiagnosticManager` that unifies all diagnostics under a single orchestrator, handling initialization, GDPR compliance/User Consent filtering, and event broadcasting out of the box.
 
 ## Getting Started
 
-The first step is to implement the FlutteDiagnostic interface for the corresponding diagnostic sdk.
+The first step is to implement the `Diagnostic` interface for your specific tracking SDK.
 
 ```dart
 import 'package:complicate_diagnostic_tool/complicate_diagnostic_tool.dart';
+import 'package:your_diagnostic_package/your_diagnostic_package.dart';
 
-final class AwesomeDiagnostic implements FlutterDiagnostic {
-    const AwesomeDiagnostic({required this.options});
+final class AwesomeDiagnostic implements Diagnostic {
+  const AwesomeDiagnostic({required this.options});
 
-    ...
+  @override
+  final DiagnosticOption options;
 
-    ComplicateDiagnosticTool get _diagnostic => ComplicateDiagnosticTool.instance;
+  ComplicateDiagnosticTool get _sdk => ComplicateDiagnosticTool.instance;
 
-    @override
-    Future<void> init() async {
-      await ComplicateDiagnosticTool.initializeApp(
-        options: options.defaultComplicateOptions,
-      );
-    }
+  @override
+  Future<void> init() async {
+    await ComplicateDiagnosticTool.initializeApp(
+      options: options.defaultComplicateOptions,
+    );
+  }
 
-    @override
-    RouteObserver<Route>? navigatorObserver({
-      required String? Function(RouteSettings? route) nameExtractor,
-    }) =>
-        ComplicateDiagnosticToolObserver(
-          analytics: _diagnostic,
-          nameExtractor: nameExtractor,
-        );
+  @override
+  Future<void> captureException({required DiagnosticException exception}) async {
+    // Basic options check is handled by the manager, but you can add custom logic
+    await _sdk.captureException(
+      exception.throwable,
+      stackTrace: exception.stackTrace,
+    );
+  }
 
-    @override
-    FutureOr<void> captureException({required DiagnosticExpection exception}) {
-      if (!options.mustCaptureExceptions) return null;
+  @override
+  Future<void> sendAnalyticEvent({required DiagnosticAnalyticEvent event}) async {
+    await _sdk.logEvent(
+      name: event.name,
+      parameters: event.parameters,
+    );
+  }
 
-      _diagnostic.captureException( exception,
-          stackTrace: stackTrace,
-          withScope: (scope) {
-            arguments?.forEach((key, value) {
-              scope.setTag(key, value);
-            });
-          },
-        );
-    }
+  @override
+  Future<void> sendLogEvent({required DiagnosticLogsEvent event}) async {
+    await _sdk.logEvent(
+      name: event.name,
+      parameters: {
+        'category': event.category ?? 'event.track',
+        'level': event.level.name,
+        ...(event.parameters ?? {}),
+      },
+    );
+  }
 
-    @override
-    FutureOr<void> sendAnalyticEvent({required DiagnosticAnalyticEvent event}) {
-      if (!options.mustSendAnalyticsEvents) return null;
+  @override
+  Future<void> setUserConsentMode({
+    required bool measurement,
+    required bool advertising,
+  }) async {
+    await _sdk.setConsent(
+      analytics: measurement,
+      ads: advertising,
+    );
+  }
 
-      _diagnostic.logEvent(
-        name: event.name,
-        parameters: event.parameters,
-      );
-    }
+  @override
+  Future<void> setUserProperties({required Map<String, String> properties}) async {
+    await _sdk.setCustomKeys(properties);
+  }
 
-    @override
-    FutureOr<void> sendLogEvent({required DiagnosticLogsEvent event}) {
-      if (!options.mustSendLogsEvents) return null;
-
-      _diagnostic.logEvent(
-        name: event.name,
-        parameters: {
-          'category': event.category ?? 'event.track',
-          'level': event.level.name,
-          ...(event.parameters ?? {}),
-          ...(_defaultParameters ?? {}),
-        },
-      );
-    }
-
+  @override
+  Future<void> dispose() async {
+    await _sdk.closeStreams();
+  }
 }
-```
 
-Once it is initialized, it can be used by instantiating the class and launching the init function before its use through a FlutteDiagnosticManager.
+Once it is initialized, it can be used by instantiating the class and launching the init function before its use through a FlutterDiagnosticManager.
 
-FlutteDiagnosticManager already has a basic implementation of how it works so that it can be used in the project directly by providing it with a list of Diagnostic. You can also extend the FlutteDiagnosticManager if other behavior is desired.
+FlutterDiagnosticManager already has a basic implementation of how it works so that it can be used in the project directly by providing it with a list of Diagnostic. You can also extend the FlutterDiagnosticManager if other behavior is desired.
 
 ## Usage
 
-Once the FlutteDiagnostic and/or its FlutteDiagnosticManager have been created, the different tools can be used with the same interface, facilitating their use and future changes.
+Once the FlutterDiagnostic and/or its FlutterDiagnosticManager have been created, the different tools can be used with the same interface, facilitating their use and future changes.
 
 
 ## License

@@ -39,7 +39,7 @@ final class AwesomeDiagnostic implements Diagnostic {
     }
 
     @override
-    FutureOr<void> captureException({required DiagnosticExpection exception}) {
+    FutureOr<void> captureException({required DiagnosticException exception}) {
       if (!options.mustCaptureExceptions) return null;
 
       _diagnostic.captureException( exception,

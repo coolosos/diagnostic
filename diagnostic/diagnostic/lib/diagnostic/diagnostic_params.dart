@@ -3,8 +3,8 @@
 ///This params contains the common diagnostic sdk exception.
 ///If custom implementation is needed you always can extend and required your
 ///custom exception in captureException function
-base class DiagnosticExpection {
-  const DiagnosticExpection({
+base class DiagnosticException {
+  const DiagnosticException({
     required this.throwable,
     required this.level,
     this.stackTrace,
@@ -23,9 +23,14 @@ base class DiagnosticExpection {
 ///If custom implementation is needed you always can extend and required your
 ///custom exception in sendAnalyticEvent function
 base class DiagnosticAnalyticEvent {
-  const DiagnosticAnalyticEvent({required this.name, required this.parameters});
+  const DiagnosticAnalyticEvent({
+    required this.name,
+    required this.parameters,
+    this.diagnosticAnalyticType = DiagnosticAnalyticType.needed,
+  });
 
   final String name;
+  final DiagnosticAnalyticType diagnosticAnalyticType;
   final Map<String, String>? parameters;
 }
 
@@ -59,7 +64,7 @@ enum DiagnosticLevel {
   ///Usually Failure information
   warning,
 
-  ///Usually Uncontrol information
+  ///Usually Uncontrollable information
   error,
 
   ///Usually Fatal information
@@ -84,6 +89,27 @@ enum DiagnosticLevel {
         return onError;
       case fatal:
         return onFatal;
+    }
+  }
+}
+
+enum DiagnosticAnalyticType {
+  measurement,
+  advertising,
+  needed;
+
+  T resolve<T>({
+    required T onMeasurement,
+    required T onAdvertising,
+    required T onNeeded,
+  }) {
+    switch (this) {
+      case measurement:
+        return onMeasurement;
+      case advertising:
+        return onAdvertising;
+      case needed:
+        return onNeeded;
     }
   }
 }

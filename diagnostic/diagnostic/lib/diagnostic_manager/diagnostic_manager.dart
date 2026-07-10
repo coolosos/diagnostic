@@ -1,109 +1,133 @@
-library diagnostic_manager;
+library;
 
 import 'dart:async';
 
 import 'package:meta/meta.dart';
 
+import '../analytics.dart';
 import '../diagnostic/diagnostic.dart';
 
-export "../diagnostic/diagnostic.dart";
+export '../diagnostic/diagnostic.dart';
 
-part "diagnostic_options_manager.dart";
+part 'diagnostic_options_manager.dart';
 
 ///Manage all the Diagnostic SDK on the project.
-///Choose where is the better sdk for each function and filter if it is neccesary.
-///
-///Generic can be provide for change the type of Diagnostic use in the project
-base class DiagnosticManager<T extends Diagnostic> implements Diagnostic {
+///Choose where is the better sdk for each function and filter if it is necessary.
+base class DiagnosticManager implements Analytic {
   const DiagnosticManager({
-    required List<T> diagnostics,
+    required List<Diagnostic> diagnostics,
     required this.options,
   }) : _diagnostics = diagnostics;
 
   ///List of diagnostic used in the current project.
-  final List<T> _diagnostics;
+  final List<Diagnostic> _diagnostics;
 
   ///Diagnostic must be use only in the extension of the manager and not outside the package.
   @protected
-  List<T> get diagnostic => _diagnostics;
+  List<Diagnostic> get diagnostics => _diagnostics;
 
-  ///Provide the multiple options for manage the diferent diagnostics sdk.
+  ///Provide the multiple options for manage the different diagnostics sdk.
   ///
   ///Contains also the bool options for send or not exception, event or logs.
   @override
   final DiagnosticManagerOption options;
 
-  ///This function must be call at the begining of the initilalization.
+  static bool consentModeMeasurement = false;
+  static bool consentModeAdvertising = false;
+
+  ///This function must be call at the beginning of the initialization.
   ///
-  ///Call all the [init] function of each sdk provide in the [diagnostic] list.
+  /// Calls all the [init] functions of each SDK provided in the [diagnostics] list.
   @override
   @mustCallSuper
   Future<void> init() async {
-    if (!(options.mustInitializeDiagnostics)) return;
-
-    final instanciates =
-        Future.wait(_diagnostics.map((diagnostic) => diagnostic.init()));
-
-    await instanciates;
+    if (!options.mustInitializeDiagnostics) return;
+    final instances = _diagnostics.map((diagnostic) => diagnostic.init());
+    await Future.wait(instances);
   }
 
-  ///Send an exception with the custom informate implement to all the diagnostic.
+  ///Send an exception with the custom informative implement to all the diagnostic.
   ///
-  ///A [DiagnosticExpection] extension can be create if you need a
+  ///A [DiagnosticException] extension can be create if you need a
   ///custom information.
   @override
   @mustCallSuper
-  FutureOr<void> captureException({
-    required covariant DiagnosticExpection exception,
-  }) {
-    if (!options.mustCaptureExceptions) return null;
+  Future<void> captureException({
+    required covariant DiagnosticException exception,
+  }) async {
+    if (!options.mustCaptureExceptions || !consentModeMeasurement) {
+      return;
+    }
 
-    for (Diagnostic diagnostic in _diagnostics) {
-      diagnostic.captureException(
-        exception: exception,
-      );
+    for (final diagnostic in _diagnostics) {
+      diagnostic.captureException(exception: exception).ignore();
     }
   }
 
-  ///Send an analytic with the custom informate implement to all the diagnostic.
+  ///Send an analytic with the custom informative implement to all the diagnostic.
   ///
   ///A [DiagnosticAnalyticEvent] extension can be create if you need a
   ///custom information.
   @override
   @mustCallSuper
-  FutureOr<void> sendAnalyticEvent({
+  Future<void> sendAnalyticEvent({
     required covariant DiagnosticAnalyticEvent event,
-  }) {
-    if (!options.mustSendAnalyticsEvents) return null;
+  }) async {
+    if (!options.mustSendAnalyticsEvents) return;
 
-    for (Diagnostic diagnostic in _diagnostics) {
-      diagnostic.sendAnalyticEvent(
-        event: event,
-      );
+    final isEventValidToSend = event.diagnosticAnalyticType.resolve(
+      onMeasurement: consentModeMeasurement,
+      onAdvertising: consentModeAdvertising,
+      onNeeded: true,
+    );
+
+    if (!isEventValidToSend) return;
+
+    for (final diagnostic in _diagnostics) {
+      diagnostic.sendAnalyticEvent(event: event).ignore();
     }
   }
 
-  ///Send an log with the custom informate implement to all the diagnostic.
+  ///Send an log with the custom informative implement to all the diagnostic.
   ///
   ///A [DiagnosticAnalyticEvent] extension can be create if you need a
   ///custom information.
   @override
   @mustCallSuper
-  FutureOr<void> sendLogEvent({required covariant DiagnosticLogsEvent event}) {
-    if (!options.mustSendLogsEvents) return null;
+  Future<void> sendLogEvent({
+    required covariant DiagnosticLogsEvent event,
+  }) async {
+    if (!options.mustSendLogsEvents || !consentModeMeasurement) return;
 
-    for (Diagnostic diagnostic in _diagnostics) {
-      diagnostic.sendLogEvent(
-        event: event,
-      );
+    for (final diagnostic in _diagnostics) {
+      diagnostic.sendLogEvent(event: event).ignore();
     }
   }
 
-  ///This function must be call before the instance is created an usually have close streams or dispose clients.
   @override
-  @mustCallSuper
-  Future<void> dispose() {
-    final disposables = _diagnostics.map((diagnostic) => diagnostic.dispose());
-    return Future.wait(disposables);
+  Future<void> setUserConsentMode({
+    required bool measurement,
+    required bool advertising,
+  }) async {
+    consentModeMeasurement = measurement;
+    consentModeAdvertising = advertising;
+
+    for (final diagnostic in _diagnostics) {
+      diagnostic
+          .setUserConsentMode(
+            measurement: measurement,
+            advertising: advertising,
+          )
+          .ignore();
+    }
+  }
+
+  @override
+  Future<void> setUserProperties({
+    required Map<String, String> properties,
+  }) async {
+    for (final diagnostic in _diagnostics) {
+      diagnostic.setUserProperties(properties: properties).ignore();
+    }
   }
 }

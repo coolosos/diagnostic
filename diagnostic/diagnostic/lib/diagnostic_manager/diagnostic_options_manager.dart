@@ -1,6 +1,6 @@
-part of "diagnostic_manager.dart";
+part of 'diagnostic_manager.dart';
 
-///Contains the send/capture and initialice options
+///Contains the send/capture and initialize options
 ///
 ///When some of them are set to false Diagnostic will not be call his function
 base class DiagnosticManagerOption extends DiagnosticOption {
