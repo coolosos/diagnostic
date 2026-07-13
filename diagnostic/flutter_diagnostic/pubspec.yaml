@@ -14,8 +14,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  diagnostic:
-    path: ../diagnostic
+  diagnostic: ^1.1.0
 
 dev_dependencies:
   coolint: ^2.1.2
