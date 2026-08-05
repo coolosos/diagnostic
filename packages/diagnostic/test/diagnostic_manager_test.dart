@@ -20,32 +20,38 @@ class _FakeDiagnostic implements Diagnostic {
   }
 
   @override
-  Future<void> captureException(
-      {required covariant DiagnosticException exception}) async {
+  Future<void> captureException({
+    required covariant DiagnosticException exception,
+  }) async {
     capturedException = exception;
   }
 
   @override
-  Future<void> sendAnalyticEvent(
-      {required covariant DiagnosticAnalyticEvent event}) async {
+  Future<void> sendAnalyticEvent({
+    required covariant DiagnosticAnalyticEvent event,
+  }) async {
     analyticEvent = event;
   }
 
   @override
-  Future<void> sendLogEvent(
-      {required covariant DiagnosticLogsEvent event}) async {
+  Future<void> sendLogEvent({
+    required covariant DiagnosticLogsEvent event,
+  }) async {
     logEvent = event;
   }
 
   @override
-  Future<void> setUserConsentMode(
-      {required bool measurement, required bool advertising}) async {
+  Future<void> setUserConsentMode({
+    required bool measurement,
+    required bool advertising,
+  }) async {
     userConsentCalled = true;
   }
 
   @override
-  Future<void> setUserProperties(
-      {required Map<String, String> properties}) async {
+  Future<void> setUserProperties({
+    required Map<String, String> properties,
+  }) async {
     userProperties = properties;
   }
 }
