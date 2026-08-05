@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import '../analytics.dart';
+import 'analytics.dart';
 import 'diagnostic_options.dart';
 import 'diagnostic_params.dart';
 

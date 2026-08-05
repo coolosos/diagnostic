@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'diagnostic/diagnostic_options.dart';
-import 'diagnostic/diagnostic_params.dart';
+import 'diagnostic_options.dart';
+import 'diagnostic_params.dart';
 
 abstract interface class Analytic {
   const Analytic({required this.options});

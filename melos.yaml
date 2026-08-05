@@ -7,9 +7,7 @@ repository:
   name: "diagnostic"
 
 packages:
-  - diagnostic/*
-  - flutter_diagnostic/**
-  - diagnostic_tools/**
+  - packages/*
 
 command:
   version:
