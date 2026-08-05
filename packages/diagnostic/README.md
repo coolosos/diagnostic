@@ -1,94 +1,132 @@
+# diagnostic
+
 ## Table of Contents
 
-- [Table of Contents](#table-of-contents)
 - [Overview](#overview)
 - [Getting Started](#getting-started)
+- [Example](#example)
 - [Usage](#usage)
 - [License](#license)
-<br>
 
 ## Overview
 
-Using diagnostic tools such as Firebase Analytic with Firebase Crashlytics, Sentry, CloudWatch or others or interchanging between them is a common practice in software development. Switching from one sdk to another often causes headaches as they are used or handled in very different ways.
+The `diagnostic` package provides a pure Dart interface for implementing diagnostic SDKs in a consistent way.
 
-For this purpose there is this development package, it provides an interface for the implementation of the different sdk, favoring the change and/or the use between them.
+It defines:
 
-For the multiple use it is also provided a DiagnosticManager that is in charge of initializing all the Diagnostic of a project and send the events to each one of them.
-
-Translated with DeepL.com (free version)
+- `Diagnostic`: a contract for exceptions, logs, analytics, consent, and user properties.
+- `DiagnosticManager`: an orchestrator that initializes all diagnostics and forwards events to them.
 
 ## Getting Started
 
-The first step is to implement the Diagnostic interface for the corresponding diagnostic sdk.
+Implement the `Diagnostic` interface for your SDK.
 
 ```dart
-import 'package:complicate_diagnostic_tool/complicate_diagnostic_tool.dart';
+import 'package:diagnostic/diagnostic/diagnostic.dart';
+import 'package:diagnostic/diagnostic_manager/diagnostic_manager.dart';
 
 final class AwesomeDiagnostic implements Diagnostic {
-    const AwesomeDiagnostic({required this.options});
+  const AwesomeDiagnostic({required this.options});
 
-    ...
+  @override
+  final DiagnosticOption options;
 
-    ComplicateDiagnosticTool get _diagnostic => ComplicateDiagnosticTool.instance;
+  @override
+  Future<void> init() async {
+    // Initialize your SDK here.
+  }
 
-    @override
-    Future<void> init() async {
-      await ComplicateDiagnosticTool.initializeApp(
-        options: options.defaultComplicateOptions,
-      );
-    }
+  @override
+  Future<void> captureException({required DiagnosticException exception}) async {
+    // Send exception information to the SDK.
+  }
 
-    @override
-    FutureOr<void> captureException({required DiagnosticException exception}) {
-      if (!options.mustCaptureExceptions) return null;
+  @override
+  Future<void> sendAnalyticEvent({required DiagnosticAnalyticEvent event}) async {
+    // Send analytics event to the SDK.
+  }
 
-      _diagnostic.captureException( exception,
-          stackTrace: stackTrace,
-          withScope: (scope) {
-            arguments?.forEach((key, value) {
-              scope.setTag(key, value);
-            });
-          },
-        );
-    }
+  @override
+  Future<void> sendLogEvent({required DiagnosticLogsEvent event}) async {
+    // Send log event to the SDK.
+  }
 
-    @override
-    FutureOr<void> sendAnalyticEvent({required DiagnosticAnalyticEvent event}) {
-      if (!options.mustSendAnalyticsEvents) return null;
+  @override
+  Future<void> setUserConsentMode({
+    required bool measurement,
+    required bool advertising,
+  }) async {
+    // Update consent state in the SDK.
+  }
 
-      _diagnostic.logEvent(
-        name: event.name,
-        parameters: event.parameters,
-      );
-    }
-
-    @override
-    FutureOr<void> sendLogEvent({required DiagnosticLogsEvent event}) {
-      if (!options.mustSendLogsEvents) return null;
-
-      _diagnostic.logEvent(
-        name: event.name,
-        parameters: {
-          'category': event.category ?? 'event.track',
-          'level': event.level.name,
-          ...(event.parameters ?? {}),
-          ...(_defaultParameters ?? {}),
-        },
-      );
-    }
-
+  @override
+  Future<void> setUserProperties({required Map<String, String> properties}) async {
+    // Send user properties to the SDK.
+  }
 }
 ```
 
-Once it is initialized, it can be used by instantiating the class and launching the init function before its use through a DiagnosticManager.
+## Example
 
-DiagnosticManager already has a basic implementation of how it works so that it can be used in the project directly by providing it with a list of Diagnostic. You can also extend the DiagnosticManager if other behavior is desired.
+```dart
+final manager = DiagnosticManager(
+  diagnostics: [
+    const AwesomeDiagnostic(
+      options: DiagnosticOption(
+        mustCaptureExceptions: true,
+        mustSendLogsEvents: true,
+        mustSendAnalyticsEvents: true,
+      ),
+    ),
+  ],
+  options: DiagnosticManagerOption(
+    mustInitializeDiagnostics: true,
+    mustCaptureExceptions: true,
+    mustSendLogsEvents: true,
+    mustSendAnalyticsEvents: true,
+  ),
+);
+
+await manager.init();
+
+await manager.captureException(
+  exception: const DiagnosticException(
+    throwable: Exception('Something went wrong'),
+    level: DiagnosticLevel.error,
+  ),
+);
+
+await manager.sendAnalyticEvent(
+  event: const DiagnosticAnalyticEvent(
+    name: 'user_signup',
+    diagnosticAnalyticType: DiagnosticAnalyticType.measurement,
+    parameters: {'method': 'email'},
+  ),
+);
+
+await manager.sendLogEvent(
+  event: const DiagnosticLogsEvent(
+    name: 'button_click',
+    level: DiagnosticLevel.info,
+    category: 'ui',
+  ),
+);
+
+await manager.setUserConsentMode(measurement: true, advertising: false);
+await manager.setUserProperties(properties: {'user_id': '12345'});
+```
 
 ## Usage
 
-Once the Diagnostic and/or its DiagnosticManager have been created, the different tools can be used with the same interface, facilitating their use and future changes.
+`DiagnosticManager` helps you control initialization and event forwarding from a single place. It also supports:
 
+- exception capture
+- analytics events
+- log events
+- consent mode management
+- user property updates
 
 ## License
 
 MIT © Coolosos
+
