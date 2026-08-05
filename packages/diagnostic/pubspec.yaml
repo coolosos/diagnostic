@@ -12,4 +12,5 @@ dependencies:
   meta: ^1.17.0
 
 dev_dependencies:
+  test: ^1.30.0
   coolint: ^2.1.2
