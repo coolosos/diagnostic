@@ -1,18 +1,23 @@
-# 1.1.1
-Export diagnostic package from flutter_diagnostic
+# Changelog
 
-# 1.1.0
-Modularization and architecture decoupling
+All notable changes to the `flutter_diagnostic` package will be documented in this file.
 
-## What's Changed
-* refactor: 🛡️ Decoupled core `DiagnosticManager` from Flutter dependencies into 100% pure Dart.
-* feat: 🔌 Added capability pattern by introducing the `FlutterRouteDiagnostic` interface.
-* feat: 📱 Added `FlutterDiagnosticManager` to isolate automatic UI error catching (`FlutterError`, `PlatformDispatcher`) and route observers.
-* refactor: 🧹 Removed generic types (`<T extends Diagnostic>`) from managers to leverage true polymorphism.
-* fix: 🔒 Updated internal asynchronous event loops with modern `.ignore()` patterns for safer telemetry broadcasting.
-* chore: 📝 Rewrote README documentation with distinct pure Dart and Flutter implementation guides.
+## 1.2.0
 
-# 1.0.0
-First package integration
-## What's Changed
-* feat: ✨ Added diagnostic base and interface
+* **feat**: Added unit and widget tests for Flutter bindings.
+* **feat**: Improved internal file structure and location (`lib/src/`).
+* **chore**: Updated package documentation and READMEs.
+
+## 1.1.1
+
+* **refactor**: Exported base `diagnostic` package directly from `flutter_diagnostic` to eliminate the need for secondary imports.
+
+## 1.1.0
+
+* **feat**: Introduced capability pattern via `FlutterRouteDiagnostic` interface.
+* **feat**: Added `FlutterDiagnosticManager` to isolate automatic UI error catching (`FlutterError`, `PlatformDispatcher`) and route observers.
+* **chore**: Rewrote documentation with dedicated Flutter implementation guides.
+
+## 1.0.0
+
+* **feat**: Initial release with Flutter diagnostic bindings.
