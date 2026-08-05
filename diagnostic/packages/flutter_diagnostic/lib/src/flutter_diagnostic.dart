@@ -1,6 +1,5 @@
-import 'package:diagnostic/diagnostic/diagnostic.dart';
+import 'package:diagnostic/diagnostic.dart';
 import 'package:flutter/widgets.dart';
-export 'package:diagnostic/diagnostic/diagnostic.dart';
 
 ///Interface for manage differents diagnostics tool as Firebase/Flutter_Sentry/Cloudwatch.
 ///

@@ -1,9 +1,9 @@
-import 'package:diagnostic/diagnostic_manager/diagnostic_manager.dart';
+import 'package:diagnostic/diagnostic.dart';
 
 import 'package:flutter/foundation.dart' hide DiagnosticLevel, DiagnosticsNode;
 import 'package:flutter/widgets.dart' hide DiagnosticLevel, DiagnosticsNode;
 
-import '../flutter_diagnostic/flutter_diagnostic.dart';
+import 'flutter_diagnostic.dart';
 
 base class FlutterDiagnosticManager extends DiagnosticManager {
   const FlutterDiagnosticManager({

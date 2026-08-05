@@ -4,10 +4,10 @@ import 'dart:async';
 
 import 'package:meta/meta.dart';
 
-import '../analytics.dart';
-import '../diagnostic/diagnostic.dart';
+import 'analytics.dart';
+import 'base_diagnostic.dart';
 
-export '../diagnostic/diagnostic.dart';
+export 'base_diagnostic.dart';
 
 part 'diagnostic_options_manager.dart';
 
