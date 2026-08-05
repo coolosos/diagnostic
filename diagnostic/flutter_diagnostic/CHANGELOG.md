@@ -1,3 +1,6 @@
+# 1.1.1
+Export diagnostic package from flutter_diagnostic
+
 # 1.1.0
 Modularization and architecture decoupling
 
