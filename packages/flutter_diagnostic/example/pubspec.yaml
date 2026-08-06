@@ -1,0 +1,16 @@
+name: flutter_diagnostic_example
+description: Example Flutter app for the flutter_diagnostic package.
+publish_to: none
+
+environment:
+  sdk: ">=3.5.0 <4.0.0"
+  flutter: ">=3.19.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_diagnostic:
+    path: ..
+
+flutter:
+  uses-material-design: true

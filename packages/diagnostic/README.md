@@ -126,6 +126,16 @@ await manager.setUserProperties(properties: {'user_id': '12345'});
 - consent mode management
 - user property updates
 
+## Example directory
+
+A runnable example is available in the `example/` directory:
+
+```bash
+cd packages/diagnostic/example
+dart pub get
+dart run bin/main.dart
+```
+
 ## License
 
 MIT © Coolosos

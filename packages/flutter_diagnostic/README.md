@@ -71,6 +71,16 @@ final class AwesomeFlutterDiagnostic implements FlutterDiagnostic {
   }
 }
 
+## Example directory
+
+A runnable Flutter example is available in the `example/` directory:
+
+```bash
+cd packages/flutter_diagnostic/example
+flutter pub get
+flutter run
+```
+
 ## Flutter usage
 
 ```dart
