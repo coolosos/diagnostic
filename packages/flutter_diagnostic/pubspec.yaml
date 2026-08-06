@@ -1,6 +1,6 @@
 name: flutter_diagnostic
 description: Diagnostic package interfaces for generating different managers or tools for control in Flutter. Usually created for Firebase, Sentry, CloudWatch, etc.
-version: 1.3.0
+version: 1.4.0
 
 repository: https://github.com/coolosos/diagnostic
 issue_tracker: https://github.com/coolosos/diagnostic/issues
@@ -14,7 +14,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  diagnostic: ^1.3.0
+  diagnostic: ^1.4.0
 
 dev_dependencies:
   flutter_test:
