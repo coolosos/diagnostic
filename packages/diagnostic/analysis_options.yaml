@@ -1,1 +1,5 @@
+analyzer:
+  errors:
+    avoid_print: ignore
+
 include: package:coolint/coolint.yaml

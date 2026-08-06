@@ -42,39 +42,47 @@ final class AwesomeFlutterDiagnostic implements FlutterDiagnostic {
   }
 
   @override
-  Future<void> captureException(
-      {required covariant DiagnosticException exception}) async {
+  Future<void> captureException({
+    required covariant DiagnosticException exception,
+  }) async {
     debugPrint('Captured Flutter exception: ${exception.throwable}');
   }
 
   @override
-  Future<void> sendAnalyticEvent(
-      {required covariant DiagnosticAnalyticEvent event}) async {
+  Future<void> sendAnalyticEvent({
+    required covariant DiagnosticAnalyticEvent event,
+  }) async {
     debugPrint('Flutter analytic event: ${event.name}');
   }
 
   @override
-  Future<void> sendLogEvent(
-      {required covariant DiagnosticLogsEvent event}) async {
+  Future<void> sendLogEvent({
+    required covariant DiagnosticLogsEvent event,
+  }) async {
     debugPrint('Flutter log event: ${event.name}');
   }
 
   @override
-  Future<void> setUserConsentMode(
-      {required bool measurement, required bool advertising}) async {
+  Future<void> setUserConsentMode({
+    required bool measurement,
+    required bool advertising,
+  }) async {
     debugPrint(
-        'Flutter consent mode: measurement=$measurement, advertising=$advertising');
+      'Flutter consent mode: measurement=$measurement, advertising=$advertising',
+    );
   }
 
   @override
-  Future<void> setUserProperties(
-      {required Map<String, String> properties}) async {
+  Future<void> setUserProperties({
+    required Map<String, String> properties,
+  }) async {
     debugPrint('Flutter user properties: $properties');
   }
 
   @override
-  RouteObserver? navigatorObserver(
-      {required String? Function(RouteSettings? route) nameExtractor}) {
+  RouteObserver? navigatorObserver({
+    required String? Function(RouteSettings? route) nameExtractor,
+  }) {
     return RouteObserver<Route>();
   }
 }
