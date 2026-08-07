@@ -12,10 +12,6 @@
  - **FEAT**: Add test dependencies and implement diagnostic tests for Flutter and Dart packages. ([868d8129](https://github.com/coolosos/diagnostic/coolosos/diagnostic/commit/868d8129065518680b00f40105021a2c136c3e11))
  - **FEAT**: Restructure diagnostic package and add Flutter support. ([44ae4d47](https://github.com/coolosos/diagnostic/coolosos/diagnostic/commit/44ae4d472708b7a53d5a012ff783c84d5b2fb263))
 
-# Changelog
-
-All notable changes to this project will be documented in this file.
-
 ## 1.2.0
 
 * **feat**: Added unit and integration tests.
