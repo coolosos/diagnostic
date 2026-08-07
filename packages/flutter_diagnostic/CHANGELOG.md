@@ -1,3 +1,7 @@
+## 1.4.1
+
+* **FIX**: correct CHANGELOG entries.
+
 ## 1.4.0
 
  - **FIX**: format method signatures for consistency in FlutterDiagnostic implementation. ([bf484019](https://github.com/coolosos/diagnostic/coolosos/diagnostic/commit/bf48401979f6bdc8d4a5ed8659d31937a82b2516))
